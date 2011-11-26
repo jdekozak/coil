@@ -35,6 +35,7 @@ int main(int argc, char* argv[]) {
   double radius;
   double intensity;
   double height;
+  std::cout << "R,y,Z,I" << std::endl;
   for(index = 1, radius = step; index < maximum_number_loops; ++index, radius+=step) {
     height = get_height(radius);
     intensity = get_intensity(radius);
