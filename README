@@ -1,1 +1,8 @@
 Magnetic field simulator.
+
+Debian Squeeze with Boost, OpenMP, ParaView
+
+1/ make
+2/ export PYTHONPATH=/usr/lib/paraview
+3/ ./glue.py
+
