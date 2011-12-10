@@ -82,14 +82,30 @@ view.CameraFocalPoint=[2.97, 0.0, 0.0]
 
 dp=GetDisplayProperties(vector)
 dp.ColorArrayName='B'
-lut = GetLookupTableForArray('B', 3,RGBPoints=[5.5806518400631296e-07, 0.23000000000000001, 0.29899999999999999, 0.754, 8.9029364504078089e-05, 0.70599999999999996, 0.016, 0.14999999999999999] , VectorMode='Magnitude', ColorSpace='Diverging', UseLogScale=1, ScalarRangeInitialized=1.0)
+lut = GetLookupTableForArray('B', 3,RGBPoints=[5.5806518400631296e-07,
+                                               0.23000000000000001,
+                                               0.29899999999999999,
+                                               0.754,
+                                               8.9029364504078089e-05,
+                                               0.70599999999999996,
+                                               0.016,
+                                               0.14999999999999999],
+                             VectorMode='Magnitude', ColorSpace='Diverging', UseLogScale=1, ScalarRangeInitialized=1.0)
 
 dp.LookupTable=lut
 dp.ColorAttributeType='POINT_DATA'
 
 dp1=GetDisplayProperties(glyph)
 dp1.ColorArrayName='GlyphVector'
-lut1 = GetLookupTableForArray('GlyphVector', 3,RGBPoints=[5.5806518400631296e-07, 0.23000000000000001, 0.29899999999999999, 0.754, 8.9029364504078089e-05, 0.70599999999999996, 0.016, 0.14999999999999999] , VectorMode='Magnitude', ColorSpace='Diverging', UseLogScale=1, ScalarRangeInitialized=1.0)
+lut1 = GetLookupTableForArray('GlyphVector', 3,RGBPoints=[5.5806518400631296e-07,
+                                                          0.23000000000000001,
+                                                          0.29899999999999999,
+                                                          0.754,
+                                                          8.9029364504078089e-05,
+                                                          0.70599999999999996,
+                                                          0.016,
+                                                          0.14999999999999999],
+                              VectorMode='Magnitude', ColorSpace='Diverging', UseLogScale=1, ScalarRangeInitialized=1.0)
 dp1.LookupTable=lut1
 dp1.ColorAttributeType='POINT_DATA'
 

@@ -107,7 +107,10 @@ struct generate_geometry {
     _maximum_number_loops(maximum_number_loops),
     _step(maximum_radius/maximum_number_loops)
   {}
-  void operator()(const profile_t& profile, const extremity_t& extremity, const height_t& height, const intensity_t& intensity) const {
+  void operator()(const profile_t& profile,
+		  const extremity_t& extremity,
+		  const height_t& height,
+		  const intensity_t& intensity) const {
     size_t index;
     double radius;
     std::cout << "R,y,Z,I" << std::endl;
