@@ -29,26 +29,30 @@ struct vector_field_generator : boost::spirit::karma::grammar<Iterator, std::pai
 typedef std::back_insert_iterator<std::string> iterator_t;
 typedef vector_field_generator<iterator_t> string_vector_field_generator;
 
-void writeResult(const std::string& filename, const mesh_t& Mesh, const field_t& Field) {
-  std::ofstream output(filename.c_str());
+struct writer {
+  writer(const std::string& filename) : _filename(filename) {}
+  void operator()(const mesh_t& Mesh, const field_t& Field) const {
+    std::ofstream output(_filename.c_str());
 
-  mesh_t::const_iterator start = Mesh.begin();
-  mesh_t::const_iterator finish = Mesh.end();
-  mesh_t::const_iterator point;
+    mesh_t::const_iterator start = Mesh.begin();
+    mesh_t::const_iterator finish = Mesh.end();
+    mesh_t::const_iterator point;
 
-  field_t::const_iterator debut = Field.begin();
-  field_t::const_iterator fin = Field.end();
-  field_t::const_iterator magnet;
+    field_t::const_iterator debut = Field.begin();
+    field_t::const_iterator fin = Field.end();
+    field_t::const_iterator magnet;
 
-  output << "x,y,z,Bx,By,Bz" << std::endl;
-  string_vector_field_generator aGenerator;
-  for(point = start, magnet = debut; point != finish; ++point, ++magnet) {
-    std::string newLine;
-    iterator_t iter(newLine);
-    boost::spirit::karma::generate_delimited(iter, aGenerator, boost::spirit::ascii::space, std::pair<Point, Vector>(*point, *magnet));
-    output << newLine << std::endl;
+    output << "x,y,z,Bx,By,Bz" << std::endl;
+    string_vector_field_generator aGenerator;
+    for(point = start, magnet = debut; point != finish; ++point, ++magnet) {
+      std::string newLine;
+      iterator_t iter(newLine);
+      boost::spirit::karma::generate_delimited(iter, aGenerator, boost::spirit::ascii::space, std::pair<Point, Vector>(*point, *magnet));
+      output << newLine << std::endl;
+    }
+    output.close();
   }
-  output.close();
-}
+  std::string _filename;
+};
 
 #endif

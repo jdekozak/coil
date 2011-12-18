@@ -77,8 +77,11 @@ int main(int argc, char* argv[]) {
   field_t aField;
   loop_t aGeometry;
 
-  readLoop(geometry_filename, aGeometry);
-  readMesh(mesh_filename, aMesh);
+  reader geometry_reader(geometry_filename);
+  reader mesh_reader(mesh_filename);
+
+  geometry_reader(aGeometry);
+  mesh_reader(aMesh);
 
   size_t elements_number = aMesh.size();
   Vector null_vector = {0,0};
@@ -88,7 +91,8 @@ int main(int argc, char* argv[]) {
 
   std::for_each(aGeometry.begin(),aGeometry.end(),boost::bind(compute_field(),::_1,boost::cref(aMesh),boost::ref(aField)) );
 
-  writeResult(field_filename, aMesh, aField);
+  writer write_field(field_filename);
+  write_field(aMesh, aField);
 
   return 0;
 }

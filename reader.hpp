@@ -36,50 +36,52 @@ struct loop_parser : boost::spirit::qi::grammar<Iterator, Loop(), boost::spirit:
 typedef std::string::const_iterator const_iterator_t;
 typedef point_parser<const_iterator_t> string_point_parser;
 typedef loop_parser<const_iterator_t> string_loop_parser;
+template<typename STRUCTURE>
+struct parser {
+  typedef void type;
+};
+template<>
+struct parser<mesh_t> {
+  typedef string_point_parser type;
+};
+template<>
+struct parser<loop_t> {
+  typedef string_loop_parser type;
+};
 
-void readMesh(const std::string& filename, mesh_t& oMesh) {
-  std::ifstream input(filename.c_str());
-  std::string aLine;
-  string_point_parser aParser;
-  while(std::getline(input, aLine)) {
-    Point point;
-    const_iterator_t iter = aLine.begin();
-    const_iterator_t end = aLine.end();
-    if(!aLine.empty()) {
-      bool aResult = boost::spirit::qi::phrase_parse(iter
-						     ,end
-						     ,aParser
-						     ,boost::spirit::ascii::space
-						     ,point);
-      if(aResult && iter == end) {
-	oMesh.push_back(point);
-      } else {
-	std::cerr << "Error parsing mesh at " << aLine << std::endl;
-      }
+
+struct reader {
+  reader(const std::string& filename) : _filename(filename) {}
+
+  template <typename STRUCTURE>
+  void operator()(STRUCTURE& data) const {
+    std::ifstream input(_filename.c_str());
+    std::string aLine;
+    typename parser<STRUCTURE>::type aParser;
+    while(std::getline(input, aLine)) {
+      (*this)(aLine, aParser, data);
     }
   }
-}
 
-void readLoop(const std::string& filename, loop_t& oLoop) {
-  std::ifstream input(filename.c_str());
-  std::string aLine;
-  string_loop_parser aParser;
-  while(std::getline(input, aLine)) {
-    Loop loop;
-    const_iterator_t iter = aLine.begin();
-    const_iterator_t end = aLine.end();
-    if(!aLine.empty()) {
+  template<typename STRUCTURE, typename PARSER>
+  void operator()(const std::string& line, const PARSER& parser, STRUCTURE& data) const {
+    typename STRUCTURE::value_type element;
+    const_iterator_t iter = line.begin();
+    const_iterator_t end = line.end();
+    if(!line.empty()) {
       bool aResult = boost::spirit::qi::phrase_parse(iter
 						     ,end
-						     ,aParser
+						     ,parser
 						     ,boost::spirit::ascii::space
-						     ,loop);
+						     ,element);
       if(aResult && iter == end) {
-	oLoop.push_back(loop);
+	data.push_back(element);
       } else {
-	std::cerr << "Error parsing loops at " << aLine << std::endl;
-      }
+	std::cerr << "Error parsing at " << line << std::endl;
+      } 
     }
   }
-}
+
+  std::string _filename;
+};
 #endif
