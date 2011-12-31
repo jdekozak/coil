@@ -4,15 +4,15 @@ import subprocess,os
 
 working_directory=os.getcwd()
 
-if False:
+if True:
     loops=open(working_directory+'/loops.csv','w')
-    command=[working_directory+'/geometry/geometry_generator', '--radius', '6', '--loops', '113']
+    command=[working_directory+'/geometry/geometry_generator', '--radius', '6', '--loops', '33', '--nef_profile']
     print command
     subprocess.check_call(command,stdout=loops)
     loops.close()
 
     mesh=open(working_directory+'/mesh.csv','w')
-    command=[working_directory+'/mesh/mesh_generator', '--xmax', '20', '--xdiv', '111', '--zdiv', '111', '--zmax', '20']
+    command=[working_directory+'/mesh/mesh_generator', '--xmax', '12', '--xdiv', '111', '--zdiv', '111', '--zmax', '6']
     print command
     subprocess.check_call(command,stdout=mesh)
     mesh.close()
@@ -26,7 +26,7 @@ field=working_directory+'/field.csv'
 geometry=working_directory+'/loops.csv'
 from paraview.simple import *
 
-if False:
+if True:
     background=OpenDataFile(geometry)
 
     background_filter=TableToPoints(background)
@@ -50,10 +50,10 @@ vector.UpdatePipeline()
 if True:
     glyph=Glyph(vector, GlyphType='Arrow')
     glyph.Vectors = ['POINTS', 'B']
-    glyph.SetScaleFactor = 10000.0
+    glyph.SetScaleFactor = 50000.0
 
 
-if False:
+if True:
     streams=StreamTracer(vector, SeedType="High Resolution Line Source" )
     streams.Vectors = ['POINTS', 'B']
 
